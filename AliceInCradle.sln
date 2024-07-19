@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35027.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AliceInCradle", "AliceInCradle.csproj", "{FB49B10E-0293-49C8-9F1F-57AEB84307BD}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "AICTool", "..\AICTool\AICTool.vdproj", "{B1F8AC73-E73D-46B2-A4FB-CB8ACDBEE87F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB49B10E-0293-49C8-9F1F-57AEB84307BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB49B10E-0293-49C8-9F1F-57AEB84307BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB49B10E-0293-49C8-9F1F-57AEB84307BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB49B10E-0293-49C8-9F1F-57AEB84307BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1F8AC73-E73D-46B2-A4FB-CB8ACDBEE87F}.Debug|Any CPU.ActiveCfg = Debug
+		{B1F8AC73-E73D-46B2-A4FB-CB8ACDBEE87F}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A3D8A5F4-FED9-4B30-8959-8AC54EF9C15F}
+	EndGlobalSection
+EndGlobal
