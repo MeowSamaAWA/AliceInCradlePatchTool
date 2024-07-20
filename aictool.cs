@@ -17,6 +17,7 @@ using Microsoft.VisualBasic;
 using Sunny.UI;
 using System.IO.Compression;
 using System.Runtime.ConstrainedExecution;
+using System.Diagnostics;
 
 namespace AliceInCradle
 {
@@ -33,6 +34,7 @@ namespace AliceInCradle
             InitializeComponent();
             gameVersion();
             downloadServer();
+            showTips();
         }
 
         //游戏版本
@@ -103,7 +105,7 @@ namespace AliceInCradle
             selecteGameRoot();
         }
 
-        public void DownLoadFixes(string url, string filePath)
+        public void DownLoadFixes(string url, string filePath, ref bool isDownloaded)
         {
             string fileName = "Assembly-CSharp.dll"; //定义文件名
             if (textBox1.Text == "")
@@ -115,6 +117,8 @@ namespace AliceInCradle
                 if (isInstall)
                 {
                     MessageBox.Show("笨蛋，你已经安装了补丁");
+                    isDownloaded = true;
+                    return;
                 }
                 else
                 {
@@ -139,10 +143,14 @@ namespace AliceInCradle
                                     client.DownloadFileCompleted += new AsyncCompletedEventHandler(ProgressCallBack);
                                     client.Credentials = CredentialCache.DefaultCredentials;
                                     client.DownloadFileAsync(uri, filePath + "\\" + fileName);
+                                    isDownloaded = true;
+                                    return;
                                 }
                                 else
                                 {
                                     MessageBox.Show("文件已存在");
+                                    isDownloaded = true;
+                                    return;
                                 }
                             }//否
                             else
@@ -267,6 +275,7 @@ namespace AliceInCradle
         public string ifilePath;
         public string ifileName;
         public string iver;
+        public string fixesUrl;
         public void installGame(string filePath, string fileName, string ver)
         {
                 ifilePath = filePath;
@@ -277,12 +286,9 @@ namespace AliceInCradle
                 //fileName = "Win+ver025f.zip";
                 
                 Thread thread = new Thread(new ThreadStart(openSelectFolder));
-                thread.SetApartmentState(ApartmentState.STA); //重点
+                thread.SetApartmentState(ApartmentState.STA); 
                 thread.Start();
-                
-                
-                
-
+                                          
 
         }
 
@@ -329,20 +335,22 @@ namespace AliceInCradle
             try
             {
                 string ver = comboBox1.Text;
-                string fixesUrl = string.Empty;
+                string Url = string.Empty;
                 if (comboBox2.Text == "154.40.45.38")
                 {
                     switch (ver)
                     {
                         case "0.25f":
-                            fixesUrl = "http://154.40.45.38:8889/down/nWWw1wqp6wIB.dll";
+                            Url = "http://154.40.45.38:8889/down/nWWw1wqp6wIB.dll";
                             break;
                         case "0.24g":
-                            fixesUrl = "http://154.40.45.38:8889/down/exjP6av1weWk.dll";
+                            Url = "http://154.40.45.38:8889/down/exjP6av1weWk.dll";
                             break;
                     }
                 }
-                DownLoadFixes(fixesUrl, textBox1.Text);
+                fixesUrl = Url;
+                bool isDownloaded = false;
+                DownLoadFixes(Url, textBox1.Text,ref isDownloaded);
             }
             catch (Exception b)
             {
@@ -351,10 +359,11 @@ namespace AliceInCradle
         }
         private void button2_Click(object sender, EventArgs e)
         {
+            getGameVer();
             setFixesDownloadAdress();
         }
         //安装补丁
-        private void installFixes()
+        private void installFixes(ref bool isInsd)
         {
                         if (textBox1.Text == "")
             {
@@ -365,6 +374,8 @@ namespace AliceInCradle
                 if (isInstall)
                 {
                     MessageBox.Show("笨蛋，你已经安装了补丁");
+                    isInsd = true;
+                    return;
                 }
                 else
                 {
@@ -372,83 +383,95 @@ namespace AliceInCradle
                     string sFilePath = textBox1.Text + "\\" + "AliceInCradle_Data" + "\\" + "Managed" + "\\" + "Assembly-CSharp.dll";
                     //MessageBox.Show(textBox1.Text + "\\" + "Managed" + "\\" + "Assembly-CSharp.dll");
 
-                    if (!File.Exists(filePath))
+                    if (!File.Exists(filePath) && isInstall == false)
                     {
                         MessageBox.Show("文件不存在，正在重新下载......");
                         try
                         {
-                            if (comboBox1.Text == "0.25f") //0.25f版本补丁
-                            {
-                                string url = "http://154.40.45.38:8889/down/nWWw1wqp6wIB.dll";
-                                string filePath1 = textBox1.Text; //将用户的游戏根目录赋值到 filePath
-                                string fileName = "Assembly-CSharp.dll"; //定义文件名
-                                WebRequest request = WebRequest.Create(url);
-                                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                                int code = Convert.ToInt32(response.StatusCode);
-                                //MessageBox.Show("StatusCode" + code.ToString());
-                                try
-                                {
-                                    if (code == 200) //判断Url可否访问
-                                    {
-                                        //是，开始下载, 并判断文件是否存在
-                                        if (!File.Exists(filePath1 + "\\" + fileName))
-                                        {
-                                            MessageBox.Show("下载中......");
-                                            WebClient client = new WebClient();
-                                            client.Credentials = CredentialCache.DefaultCredentials;
-                                            client.DownloadFile(url, filePath1 + "\\" + fileName);
-                                            MessageBox.Show("下载完成");
-                                        }
-                                        else
-                                        {
-                                            MessageBox.Show("文件已存在");
-                                        }
-                                    }//否
-                                    else
-                                    {
-                                        MessageBox.Show("网络错误");
-                                    }
-                                }
-                                catch (Exception a)
-                                {
-                                    MessageBox.Show(a.Message);
-                                }
+                            bool isDownloaded = false;
+                            DownLoadFixes(fixesUrl, filePath,ref isDownloaded);
+
+                            if (isDownloaded) {
+                                isInsd = true;
+                                return;
                             }
-                            else if (comboBox1.Text == "0.24g") //0.24g版本补丁, 同上
-                            {
-                                string url = "http://154.40.45.38:8889/down/exjP6av1weWk.dll";
-                                string filePath2 = textBox1.Text;
-                                string fileName = "Assembly-CSharp.dll";
-                                WebRequest request = WebRequest.Create(url);
-                                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                                int code = Convert.ToInt32(response.StatusCode);
-                                //MessageBox.Show("StatusCode" + code.ToString());
-                                try
-                                {
-                                    if (code == 200) //判断Url可否访问
-                                    {
-                                        if (!File.Exists(filePath2 + "\\" + fileName))
-                                        {
-                                            WebClient client = new WebClient();
-                                            client.Credentials = CredentialCache.DefaultCredentials;
-                                            client.DownloadFile(url, filePath2 + "\\" + fileName);
-                                            MessageBox.Show("下载完成");
-                                        }
-                                        else
-                                        {
-                                            MessageBox.Show("文件已存在");
-                                        }
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show("网络错误");
-                                    }
-                                }
-                                catch (Exception a)
-                                {
-                                    MessageBox.Show(a.Message);
-                                }
-                            }
+
+
+                            //if (comboBox1.Text == "0.25f") //0.25f版本补丁
+                            //{
+                            //    string url = "http://154.40.45.38:8889/down/nWWw1wqp6wIB.dll";
+                            //    string filePath1 = textBox1.Text; //将用户的游戏根目录赋值到 filePath
+                            //    string fileName = "Assembly-CSharp.dll"; //定义文件名
+                            //    WebRequest request = WebRequest.Create(url);
+                            //    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                            //    int code = Convert.ToInt32(response.StatusCode);
+                            //    //MessageBox.Show("StatusCode" + code.ToString());
+                            //    try
+                            //    {
+                            //        if (code == 200) //判断Url可否访问
+                            //        {
+                            //            //是，开始下载, 并判断文件是否存在
+                            //            if (!File.Exists(filePath1 + "\\" + fileName))
+                            //            {
+                            //                MessageBox.Show("下载中......");
+                            //                WebClient client = new WebClient();
+                            //                client.Credentials = CredentialCache.DefaultCredentials;
+                            //                client.DownloadFile(url, filePath1 + "\\" + fileName);
+                            //                MessageBox.Show("下载完成");
+                            //                isInsd = true;
+                            //                return;
+                            //            }
+                            //            else
+                            //            {
+                            //                MessageBox.Show("文件已存在");
+                            //                return;
+                            //            }
+                            //        }//否
+                            //        else
+                            //        {
+                            //            MessageBox.Show("网络错误");
+                            //        }
+                            //    }
+                            //    catch (Exception a)
+                            //    {
+                            //        MessageBox.Show(a.Message);
+                            //    }
+                            //}
+                            //else if (comboBox1.Text == "0.24g") //0.24g版本补丁, 同上
+                            //{
+                            //    string url = "http://154.40.45.38:8889/down/exjP6av1weWk.dll";
+                            //    string filePath2 = textBox1.Text;
+                            //    string fileName = "Assembly-CSharp.dll";
+                            //    WebRequest request = WebRequest.Create(url);
+                            //    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                            //    int code = Convert.ToInt32(response.StatusCode);
+                            //    //MessageBox.Show("StatusCode" + code.ToString());
+                            //    try
+                            //    {
+                            //        if (code == 200) //判断Url可否访问
+                            //        {
+                            //            if (!File.Exists(filePath2 + "\\" + fileName))
+                            //            {
+                            //                WebClient client = new WebClient();
+                            //                client.Credentials = CredentialCache.DefaultCredentials;
+                            //                client.DownloadFile(url, filePath2 + "\\" + fileName);
+                            //                MessageBox.Show("下载完成");
+                            //            }
+                            //            else
+                            //            {
+                            //                MessageBox.Show("文件已存在");
+                            //            }
+                            //        }
+                            //        else
+                            //        {
+                            //            MessageBox.Show("网络错误");
+                            //        }
+                            //    }
+                            //    catch (Exception a)
+                            //    {
+                            //        MessageBox.Show(a.Message);
+                            //    }
+                            //}
                         }
                         catch (Exception a)
                         {
@@ -497,9 +520,9 @@ namespace AliceInCradle
                                         break;
                                 }
                             }
-                            catch
+                            catch(Exception ex)
                             {
-                                MessageBox.Show("Assembly-CSharp.dll 不存在");
+                                MessageBox.Show(ex.Message);
                             }
                         }
                         else
@@ -520,7 +543,30 @@ namespace AliceInCradle
         }
         private void button3_Click(object sender, EventArgs e)
         {
-            installFixes();
+            getGameVer();
+            bool isInsd = false;
+            installFixes(ref isInsd);
+            if (isInsd)
+            {
+                runGame();
+            }
+
+        }
+        private void runGame()
+        {
+            MessageBox.Show("正在打开游戏......");
+            try
+            {
+                string gameName = "AliceInCradle.exe";
+                string gamePath = textBox1.Text + "\\" + gameName;
+                Process p = Process.Start(gamePath);
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show("打开失败，错误信息：\n"+ ex.Message);
+            }
+
         }
 
         private void DFCallBack(object sender, DownloadProgressChangedEventArgs d)
@@ -533,7 +579,12 @@ namespace AliceInCradle
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            
+        }
+        private void showTips()
+        {
+            tips tips = new tips();
+            tips.Show();
         }
         private void label1_Click(object sender, EventArgs e)
         {
@@ -563,19 +614,21 @@ namespace AliceInCradle
         {
 
         }
+
+        
         private void uiButton3_Click(object sender, EventArgs e)
         {
-            string url;
+            string gameUrl;
             string ver = comboBox1.Text;
-            
+
             switch (ver) {
                 case "0.25f":
-                    url = "https://dl.aliceincradle.dev/Win%20ver025f.zip";
-                    downloadVer(url, "0.25f");
+                    gameUrl = "https://dl.aliceincradle.dev/Win%20ver025f.zip";
+                    downloadVer(gameUrl, "0.25f");
                     break;
                 case "0.24g":
-                    url = "https://shigure.shiro.dev/f/ePxiP/Win%20ver024g.zip";
-                    downloadVer(url, "0.24g");
+                    gameUrl = "https://shigure.shiro.dev/f/ePxiP/Win%20ver024g.zip";
+                    downloadVer(gameUrl, "0.24g");
                     break;
                 default:
                     MessageBox.Show("未知版本");
@@ -589,5 +642,9 @@ namespace AliceInCradle
             getGameVer();
         }
 
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+           
+        }
     }
 }
