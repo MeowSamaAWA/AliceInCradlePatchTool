@@ -42,6 +42,10 @@ namespace AliceInCradle
         {
             comboBox1.Items.Add("0.25f");
             comboBox1.Items.Add("0.24g");
+            comboBox1.Items.Add("0.23e_2");
+            comboBox1.Items.Add("0.22q");
+            comboBox1.Items.Add("0.21r");
+            //comboBox1.Items.Add("0.20s");
         }
         //获取游戏版本
         public void getGameVer()
@@ -61,12 +65,40 @@ namespace AliceInCradle
                         MessageBox.Show("已为您自动选择好版本，如有错误，请手动选择。");
                         comboBox1.Text = "0.24g";
                         break;
+                    case 2618368:
+                        MessageBox.Show("已为您自动选择好版本，如有错误，请手动选择。");
+                        comboBox1.Text = "0.23e_2";
+                        break;
+                    case 2454016:
+                        MessageBox.Show("已为您自动选择好版本，如有错误，请手动选择。");
+                        comboBox1.Text = "0.22q";
+                        break;
+                    case 2125824:
+                        MessageBox.Show("已为您自动选择好版本，如有错误，请手动选择。");
+                        comboBox1.Text = "0.21r";
+                        break; 
+                    //case 1911808:
+                    //    MessageBox.Show("已为您自动选择好版本，如有错误，请手动选择。");
+                    //    comboBox1.Text = "0.20s";
+                    //    break;
                     case 3273216:
                         comboBox1.Text = "0.25f";
                         isInstall = true;
                         break;
                     case 2903552:
                         comboBox1.Text = "0.24g";
+                        isInstall = true;
+                        break;
+                    case 2613248:
+                        comboBox1.Text = "0.23e_2";
+                        isInstall = true;
+                        break;
+                    case 2449408:
+                        comboBox1.Text = "0.22q";
+                        isInstall = true;
+                        break;
+                    case 2121216:
+                        comboBox1.Text = "0.21r";
                         isInstall = true;
                         break;
                     default:
@@ -76,10 +108,16 @@ namespace AliceInCradle
             }
             catch (Exception e)
             {
+                if (textBox1.Text == "")
                 {
-                    MessageBox.Show(e.Message);
+                    MessageBox.Show("未选择游戏路径 \n 错误信息:" + e.Message);
                     selecteGameRoot();
                 }
+                else
+                {
+                    MessageBox.Show("未知错误\n错误信息:" + e.Message);
+                }
+
             }
 
         }
@@ -123,8 +161,6 @@ namespace AliceInCradle
                 else
                 {
                     //MessageBox.Show(fileInfo.Length.ToString());
-                    if (comboBox1.Text == "0.25f") //0.25f版本补丁
-                    {
                         WebRequest request = WebRequest.Create(url);
                         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                         int code = Convert.ToInt32(response.StatusCode);
@@ -156,47 +192,14 @@ namespace AliceInCradle
                             else
                             {
                                 MessageBox.Show("网络错误");
-                            }
+                                isDownloaded = false;
+                                return;
+                        }
                         }
                         catch (Exception a)
                         {
                             MessageBox.Show(a.Message);
                         }
-                    }
-                    //else if (comboBox1.Text == "0.24g") //0.24g版本补丁, 同上
-                    //{
-
-                    //    WebRequest request = WebRequest.Create(url);
-                    //    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                    //    int code = Convert.ToInt32(response.StatusCode);
-                    //    //MessageBox.Show("StatusCode" + code.ToString());
-                    //    try
-                    //    {
-                    //        if (code == 200)
-                    //        {
-                    //            if (!File.Exists(filePath + "\\" + fileName))
-                    //            {
-                    //                MessageBox.Show("下载中......");
-                    //                WebClient client = new WebClient();
-                    //                client.Credentials = CredentialCache.DefaultCredentials;
-                    //                client.DownloadFile(url, filePath + "\\" + fileName);
-                    //                MessageBox.Show("下载完成");
-                    //            }
-                    //            else
-                    //            {
-                    //                MessageBox.Show("文件已存在");
-                    //            }
-                    //        }
-                    //        else
-                    //        {
-                    //            MessageBox.Show("网络错误");
-                    //        }
-                    //    }
-                    //    catch (Exception a)
-                    //    {
-                    //        MessageBox.Show(a.Message);
-                    //    }
-                    //}
                 }
             }
         }
@@ -229,6 +232,18 @@ namespace AliceInCradle
                     case "0.24g":
                         fileName = "Win+ver024g.zip";
                         break;
+                    case "0.23e_2":
+                        fileName = "Win+ver023e_2.zip";
+                        break;
+                    case "0.22q":
+                        fileName = "Win+ver022q.zip";
+                        break;
+                    case "0.21r":
+                        fileName = "Win+ver021r.zip";
+                        break;
+                    //case "0.20s":
+                    //    fileName = "Win+ver020s.zip";
+                    //    break;
                 }
                 WebRequest request = WebRequest.Create(url);
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -316,6 +331,18 @@ namespace AliceInCradle
                         case "0.24g":
                             textBox1.Text = zipFilePath + "\\Win ver024\\AliceInCradle_ver024";
                             break;
+                        case "0.23e_2":
+                            textBox1.Text = zipFilePath + "\\Win ver023\\AliceInCradle_ver023";
+                            break;
+                        case "0.22q":
+                            textBox1.Text = zipFilePath + "\\Win ver022\\AliceInCradle_ver022";
+                            break;
+                        case "0.21r":
+                            textBox1.Text = zipFilePath + "\\Win ver021\\AliceInCradle_ver021r";
+                            break;
+                        //case "0.20s":
+                        //    textBox1.Text = zipFilePath + "\\Win ver020\\AliceInCradle_ver020s";
+                        //    break;
                     }
                     //textBox1.Text = zipFilePath;
                 }
@@ -326,7 +353,7 @@ namespace AliceInCradle
             }
             else
             {
-                MessageBox.Show("Err");
+                MessageBox.Show("未选择安装目录");
             }
         }
         //下载补丁文件
@@ -341,11 +368,23 @@ namespace AliceInCradle
                     switch (ver)
                     {
                         case "0.25f":
-                            Url = "http://154.40.45.38:8889/down/nWWw1wqp6wIB.dll";
+                            Url = "http://154.40.45.38/0.25f/Assembly-CSharp.dll";
                             break;
                         case "0.24g":
-                            Url = "http://154.40.45.38:8889/down/exjP6av1weWk.dll";
+                            Url = "http://154.40.45.38/0.24g/Assembly-CSharp.dll";
                             break;
+                        case "0.23e_2":
+                            Url = "http://154.40.45.38/0.23e_2/Assembly-CSharp.dll";
+                            break;
+                        case "0.22q":
+                            Url = "http://154.40.45.38/0.22q/Assembly-CSharp.dll";
+                            break;
+                        case "0.21r":
+                            Url = "http://154.40.45.38/0.21r/Assembly-CSharp.dll";
+                            break;
+                        //case "0.20s":
+                        //    Url = "http://154.40.45.38/0.20s/Assembly-CSharp.dll";
+                        //    break;
                     }
                 }
                 fixesUrl = Url;
@@ -359,13 +398,13 @@ namespace AliceInCradle
         }
         private void button2_Click(object sender, EventArgs e)
         {
-            getGameVer();
+            //getGameVer();
             setFixesDownloadAdress();
         }
         //安装补丁
         private void installFixes(ref bool isInsd)
         {
-                        if (textBox1.Text == "")
+           if (textBox1.Text == "")
             {
                 MessageBox.Show("笨蛋，还没选择游戏根目录");
             }
@@ -483,42 +522,26 @@ namespace AliceInCradle
                         string ver = comboBox1.Text;
                         FileInfo fileInfo = new FileInfo(sFilePath);
                         long ltInfo = fileInfo.Length;
-                        switch (ltInfo)
-                        {
-                            case 3273216:
-                                isInstall = true;
-                                break;
-                            case 2904064:
-                                isInstall = true;
-                                break;
-                        }
+                        //switch (ltInfo)
+                        //{
+                        //    case 3273216:
+                        //        isInstall = true;
+                        //        break;
+                        //    case 2904064:
+                        //        isInstall = true;
+                        //        break;
+                        //}
                         if (isInstall == false)
                         {
                             try
                             {
-                                //检测版本                    
-                                switch (ver)
-                                {
-                                    case "0.25f":
-                                        File.Delete(sFilePath);
-                                        Thread.Sleep(100);
-                                        File.Move(filePath, sFilePath);
-                                        MessageBox.Show(ver + "补丁安装成功");
-                                        //Application.Exit();
-                                        isInstall = true;
-                                        break;
-                                    case "0.24g":
-                                        File.Delete(sFilePath);
-                                        Thread.Sleep(100);
-                                        File.Move(filePath, sFilePath);
-                                        MessageBox.Show(ver + "补丁安装成功");
-                                        //Application.Exit();
-                                        isInstall = true;
-                                        break;
-                                    default:
-                                        MessageBox.Show("未知版本");
-                                        break;
-                                }
+
+                                    File.Delete(sFilePath);
+                                    Thread.Sleep(100);
+                                    File.Move(filePath, sFilePath);
+                                    MessageBox.Show(ver + "补丁安装成功");
+                                    //Application.Exit();
+                                    isInstall = true;
                             }
                             catch(Exception ex)
                             {
@@ -527,15 +550,7 @@ namespace AliceInCradle
                         }
                         else
                         {
-                            switch (ltInfo)
-                            {
-                                case 3273216:
-                                    MessageBox.Show("您已安装" + ver + "补丁");
-                                    break;
-                                case 2903552:
-                                    MessageBox.Show("您已安装" + ver + "补丁");
-                                    break;
-                            }
+                            MessageBox.Show("您已安装" + ver + "补丁");
                         }
                     }
                 }
@@ -543,7 +558,7 @@ namespace AliceInCradle
         }
         private void button3_Click(object sender, EventArgs e)
         {
-            getGameVer();
+            //getGameVer();
             bool isInsd = false;
             installFixes(ref isInsd);
             if (isInsd)
@@ -630,6 +645,22 @@ namespace AliceInCradle
                     gameUrl = "https://shigure.shiro.dev/f/ePxiP/Win%20ver024g.zip";
                     downloadVer(gameUrl, "0.24g");
                     break;
+                case "0.23e_2":
+                    gameUrl = "https://shigure.shiro.dev/f/rxKCl/Win%20ver023e_2.zip";
+                    downloadVer(gameUrl, "0.23e_2");
+                    break;
+                case "0.22q":
+                    gameUrl = "https://shigure.shiro.dev/f/DxQcw/Win%28Full%29%20ver022q.zip";
+                    downloadVer(gameUrl, "0.22q");
+                    break;
+                case "0.21r":
+                    gameUrl = "https://shigure.shiro.dev/f/glwfB/Win%20ver021r.zip";
+                    downloadVer(gameUrl, "0.21r");
+                    break;
+                //case "0.20s":
+                //    gameUrl = "https://shigure.shiro.dev/f/AGGtv/Win_ver020s.zip";
+                //    downloadVer(gameUrl, "0.20s");
+                //    break;
                 default:
                     MessageBox.Show("未知版本");
                     break;
@@ -646,5 +677,6 @@ namespace AliceInCradle
         {
            
         }
+
     }
 }
