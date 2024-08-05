@@ -58,7 +58,7 @@
             this.uiButton1.ForePressColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.uiButton1.LightColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(244)))), ((int)(((byte)(240)))));
             this.uiButton1.Location = new System.Drawing.Point(470, 269);
-            this.uiButton1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.uiButton1.Margin = new System.Windows.Forms.Padding(4);
             this.uiButton1.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiButton1.Name = "uiButton1";
             this.uiButton1.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
@@ -79,9 +79,9 @@
             this.uiLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.uiLabel2.Location = new System.Drawing.Point(33, 68);
             this.uiLabel2.Name = "uiLabel2";
-            this.uiLabel2.Size = new System.Drawing.Size(628, 75);
+            this.uiLabel2.Size = new System.Drawing.Size(628, 138);
             this.uiLabel2.TabIndex = 20;
-            this.uiLabel2.Text = "使用方法:\r\n\r\n选择好版本和游戏根目录，接着依次点击前三个按钮即可";
+            this.uiLabel2.Text = "使用方法:\r\n\r\n选择好版本和游戏根目录，接着依次点击前三个按钮即可。\r\n或者\r\n点击自动获取\r\n\r\n";
             this.uiLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tips
@@ -94,7 +94,7 @@
             this.Controls.Add(this.uiButton1);
             this.Controls.Add(this.uiLabel1);
             this.Font = new System.Drawing.Font("萝莉体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "tips";
