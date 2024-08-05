@@ -688,15 +688,7 @@ namespace AliceInCradle
         }
         private void getUpdate()
         {
-            UpdateInfoEventArgs args = new UpdateInfoEventArgs();
-            if (args.IsUpdateAvailable)
-            {
-                AutoUpdater.Start("https://aic.meow.ink/updates/AutoUpdaterStarter.xml");
-            }
-            else
-            {
-                MessageBox.Show("未找到新版本");
-            }
+            AutoUpdater.Start("https://aic.meow.ink/updates/AutoUpdaterStarter.xml");
         }
 
         private void uiButton5_Click(object sender, EventArgs e)
